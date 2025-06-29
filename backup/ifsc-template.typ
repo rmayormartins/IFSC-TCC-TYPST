@@ -1,6 +1,5 @@
 // ifsc-template.typ - Template para TCC IFSC conforme Manual de Normalização 2025
 // Baseado no Manual de Normalização de Trabalhos Acadêmicos SiBI/IFSC (rev. 08abr25)
-// Conforme ABNT NBR 14724:2024, NBR 6023:2018
 
 #let ifsc-template(
   titulo: "",
@@ -28,33 +27,32 @@
   body
 ) = {
   
-  // Configurações conforme Manual IFSC (Quadro 1 - Regras gerais)
+  // Configurações conforme Manual IFSC (Quadro 1)
   set document(title: titulo, author: autor)
   
-  // DIMENSÃO A4 (21cm x 29,7cm) e margens conforme seção 2.2
+  // DIMENSÃO A4 e margens conforme seção 2.2
   set page(
     paper: "a4", 
     margin: (top: 3cm, bottom: 2cm, left: 3cm, right: 2cm),
   )
   
-  // FONTE: Times New Roman ou Arial (conforme Quadro 1)
+  // FONTE padrão (conforme Quadro 1)
   set text(
-    font: "Times", 
     size: 12pt, 
     lang: "pt",
   )
   
-  // ESPAÇAMENTO: 1,5 para todo o texto (conforme Quadro 1)
+  // ESPAÇAMENTO: 1,5 conforme Quadro 1
   set par(
     justify: true, 
-    leading: 0.65em, // 1.5 em Typst
+    leading: 0.65em,
     first-line-indent: 1.25cm,
   )
   
-  // Configuração de numeração progressiva conforme seção 2.6 (até quinária)
+  // Numeração progressiva conforme seção 2.6
   set heading(numbering: "1.1.1.1.1")
   
-  // SEÇÃO PRIMÁRIA (conforme Quadro 2 - maiúscula e negrito)
+  // SEÇÃO PRIMÁRIA
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
     v(2cm)
@@ -70,7 +68,7 @@
     v(1cm)
   }
   
-  // SEÇÃO SECUNDÁRIA (conforme Quadro 2 - maiúscula e negrito)
+  // SEÇÃO SECUNDÁRIA
   show heading.where(level: 2): it => {
     v(0.65em)
     block[
@@ -85,7 +83,7 @@
     v(0.65em)
   }
   
-  // Seção terciária (conforme Quadro 2 - negrito, primeira letra maiúscula)
+  // Seções terciária, quaternária e quinária
   show heading.where(level: 3): it => {
     v(0.65em)
     block[
@@ -100,7 +98,6 @@
     v(0.65em)
   }
   
-  // Seção quaternária (conforme Quadro 2 - negrito)
   show heading.where(level: 4): it => {
     v(0.65em)
     block[
@@ -115,7 +112,6 @@
     v(0.65em)
   }
   
-  // Seção quinária (conforme Quadro 2 - negrito)
   show heading.where(level: 5): it => {
     v(0.65em)
     block[
@@ -130,35 +126,41 @@
     v(0.65em)
   }
   
-  // Configuração de figuras conforme seção 2.11
-  show figure: it => {
-    v(1em)
-    align(center)[
+  // Configuração limpa de figuras e tabelas - CORRIGIDA
+  show figure: it => [
+    #v(1em)
+    #align(center)[
+      #if it.kind == table [
+        #strong[Tabela #counter(figure.where(kind: table)).display() – #it.caption.body]
+      ] else if it.kind == "quadro" [
+        #strong[Quadro #counter(figure.where(kind: "quadro")).display() – #it.caption.body]
+      ] else [
+        #strong[Figura #counter(figure.where(kind: image)).display() – #it.caption.body]
+      ]
+      
       #it.body
       #v(0.5em)
-      #block[
-        #set text(size: 12pt) // Título com fonte 12
-        #set par(leading: 0.65em, justify: false, first-line-indent: 0cm)
-        #it.caption
+      
+      #text(size: 10pt)[
+        Fonte: #if it.supplement != none [#it.supplement] else [elaborado pelo próprio autor.]
       ]
     ]
-    v(1em)
-  }
+    #v(1em)
+  ]
   
-  // Configuração de equações conforme seção 2.10
+  // Configuração de equações
   show math.equation.where(block: true): it => {
     v(1em)
     align(center)[#it]
     v(1em)
   }
   
-  // CAPA (conforme seção 3.1 e Imagem 4)
+  // CAPA
   page[
     #set par(leading: 0.65em, first-line-indent: 0cm)
     #align(center + horizon)[
       #v(-2cm)
       
-      // Nome da instituição em maiúscula
       #text(weight: "bold", size: 12pt)[
         INSTITUTO FEDERAL DE SANTA CATARINA
         
@@ -169,12 +171,10 @@
       
       #v(4cm)
       
-      // Nome do autor em maiúscula
       #text(size: 12pt)[#upper(autor)]
       
       #v(4cm)
       
-      // Título em negrito e maiúscula
       #block(width: 85%)[
         #set text(size: 12pt, weight: "bold")
         #set par(leading: 0.65em)
@@ -189,7 +189,6 @@
       
       #v(1fr)
       
-      // Local e ano
       #text(size: 12pt)[
         #upper(cidade)
         
@@ -198,19 +197,17 @@
     ]
   ]
   
-  // FOLHA DE ROSTO (conforme seção 3.2 e Imagem 5)
+  // FOLHA DE ROSTO
   page[
     #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
     #v(2cm)
     
-    // Nome do autor centralizado
     #align(center)[
       #text(size: 12pt)[#upper(autor)]
     ]
     
     #v(4cm)
     
-    // Título centralizado
     #align(center)[
       #block(width: 85%)[
         #set text(size: 12pt, weight: "bold")
@@ -227,11 +224,10 @@
     
     #v(2.5cm)
     
-    // Natureza do trabalho (conforme Quadro 10 - fonte 10, espaçamento simples)
     #align(right)[
       #box(width: 8.5cm)[
         #set par(first-line-indent: 0cm, justify: true, leading: 0.5em)
-        #set text(size: 10pt) // Fonte 10 conforme Quadro 1
+        #set text(size: 10pt)
         #tipo-trabalho apresentado ao Curso de #curso do Instituto Federal de Santa Catarina, Campus #campus, como requisito parcial para obtenção do título de #grau.
         
         #if orientador != "" [
@@ -248,7 +244,6 @@
     
     #v(1fr)
     
-    // Local e ano
     #align(center)[
       #text(size: 12pt)[
         #upper(cidade)
@@ -258,142 +253,7 @@
     ]
   ]
   
-  // AGRADECIMENTOS (conforme seção 3.6 - opcional)
-  if agradecimentos != none {
-    page[
-      #v(2cm)
-      // Título centralizado sem numeração (conforme seção 2.4)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[AGRADECIMENTOS]
-      ]
-      #v(2cm)
-      
-      #set par(first-line-indent: 1.25cm, justify: true, leading: 0.65em)
-      #agradecimentos
-    ]
-  }
-  
-  // RESUMO (conforme seção 3.8 e Imagem 11)
-  if resumo != none {
-    page[
-      #v(2cm)
-      // Título centralizado sem numeração (conforme seção 2.4)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[RESUMO]
-      ]
-      #v(2cm)
-      
-      #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
-      #resumo
-      
-      #v(1.5em)
-      #if palavras-chave.len() > 0 [
-        #text(weight: "bold")[Palavras-chave: ] #palavras-chave.join("; ").
-      ]
-    ]
-  }
-  
-  // ABSTRACT (conforme seção 3.9 e Imagem 12)
-  if abstract != none {
-    page[
-      #v(2cm)
-      // Título centralizado sem numeração (conforme seção 2.4)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[ABSTRACT]
-      ]
-      #v(2cm)
-      
-      #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
-      #abstract
-      
-      #v(1.5em)
-      #if keywords.len() > 0 [
-        #text(weight: "bold")[Keywords: ] #keywords.join("; ").
-      ]
-    ]
-  }
-  
-  // LISTA DE ILUSTRAÇÕES (conforme seção 3.10 - opcional)
-  if lista-figuras {
-    page[
-      #v(2cm)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[LISTA DE ILUSTRAÇÕES]
-      ]
-      #v(2cm)
-      
-      #outline(
-        title: none,
-        target: figure.where(kind: image),
-        indent: auto,
-      )
-    ]
-  }
-  
-  // LISTA DE TABELAS (conforme seção 3.11 - opcional)
-  if lista-tabelas {
-    page[
-      #v(2cm)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[LISTA DE TABELAS]
-      ]
-      #v(2cm)
-      
-      #outline(
-        title: none,
-        target: figure.where(kind: table),
-        indent: auto,
-      )
-    ]
-  }
-  
-  // SUMÁRIO (conforme seção 3.14 e Imagem 17)
-  page[
-    #v(2cm)
-    #align(center)[
-      #text(size: 12pt, weight: "bold")[SUMÁRIO]
-    ]
-    #v(2cm)
-    
-    // Formatação específica do sumário conforme manual IFSC
-    #show outline.entry.where(level: 1): it => {
-      // Seção primária: MAIÚSCULO + negrito
-      v(0.65em) // Espaçamento 1,5 (equivalente ao texto)
-      text(weight: "bold", upper(it))
-    }
-    
-    #show outline.entry.where(level: 2): it => {
-      // Seção secundária: MAIÚSCULO + texto normal
-      v(0.65em) // Espaçamento 1,5
-      upper(it)
-    }
-    
-    #show outline.entry.where(level: 3): it => {
-      // Seção terciária: Primeira letra maiúscula + negrito
-      v(0.65em) // Espaçamento 1,5
-      text(weight: "bold", it)
-    }
-    
-    #show outline.entry.where(level: 4): it => {
-      // Seção quaternária: Primeira letra maiúscula + texto normal
-      v(0.65em) // Espaçamento 1,5
-      it
-    }
-    
-    #show outline.entry.where(level: 5): it => {
-      // Seção quinária: Primeira letra maiúscula + texto normal
-      v(0.65em) // Espaçamento 1,5
-      it
-    }
-    
-    #outline(
-      title: none,
-      indent: 0pt,
-      depth: 5,
-    )
-  ]
-  
-  // FICHA CATALOGRÁFICA (conforme seção 3.3)
+  // FICHA CATALOGRÁFICA
   page[
     #v(1fr)
     #align(center)[
@@ -441,19 +301,17 @@
     ]
   ]
   
-  // FOLHA DE APROVAÇÃO (conforme seção 3.4)
+  // FOLHA DE APROVAÇÃO
   page[
     #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
     #v(2cm)
     
-    // Nome do autor centralizado
     #align(center)[
       #text(size: 12pt)[#upper(autor)]
     ]
     
     #v(2cm)
     
-    // Título centralizado
     #align(center)[
       #block(width: 85%)[
         #set text(size: 12pt, weight: "bold")
@@ -470,7 +328,6 @@
     
     #v(1.5cm)
     
-    // Natureza do trabalho
     #align(center)[
       #box(width: 12cm)[
         #set par(first-line-indent: 0cm, justify: true, leading: 0.5em)
@@ -487,7 +344,6 @@
     
     #v(2cm)
     
-    // Banca examinadora
     #align(center)[
       #set par(leading: 1.5em)
       
@@ -517,11 +373,10 @@
     ]
   ]
   
-  // DEDICATÓRIA (conforme seção 3.5 - opcional)
+  // DEDICATÓRIA
   if dedicatoria != none {
     page[
       #v(1fr)
-      // Alinhamento do meio da mancha gráfica até margem direita (conforme manual)
       #align(right)[
         #box(width: 8cm)[
           #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
@@ -533,11 +388,24 @@
     ]
   }
   
-  // EPÍGRAFE (conforme seção 3.7 - opcional)
+  // AGRADECIMENTOS
+  if agradecimentos != none {
+    page[
+      #v(2cm)
+      #align(center)[
+        #text(size: 12pt, weight: "bold")[AGRADECIMENTOS]
+      ]
+      #v(2cm)
+      
+      #set par(first-line-indent: 1.25cm, justify: true, leading: 0.65em)
+      #agradecimentos
+    ]
+  }
+  
+  // EPÍGRAFE
   if epigrafe != none {
     page[
       #v(1fr)
-      // Alinhamento do meio da mancha gráfica até margem direita (conforme manual)
       #align(right)[
         #box(width: 8cm)[
           #set par(first-line-indent: 0cm, justify: false, leading: 0.65em)
@@ -549,28 +417,135 @@
     ]
   }
   
-  // Configuração para o corpo do documento (conforme seção 2.3)
-  set page(
-    numbering: "1",
-    header: context {
-      let page-num = counter(page).get().first()
-      if page-num >= 1 [
-        #align(right)[
-          #text(size: 10pt)[#page-num]
-        ]
+  // RESUMO
+  if resumo != none {
+    page[
+      #v(2cm)
+      #align(center)[
+        #text(size: 12pt, weight: "bold")[RESUMO]
       ]
-    },
-  )
+      #v(2cm)
+      
+      #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
+      #resumo
+      
+      #v(1.5em)
+      #if palavras-chave.len() > 0 [
+        #text(weight: "bold")[Palavras-chave: ] #palavras-chave.join("; ").
+      ]
+    ]
+  }
+  
+  // ABSTRACT
+  if abstract != none {
+    page[
+      #v(2cm)
+      #align(center)[
+        #text(size: 12pt, weight: "bold")[ABSTRACT]
+      ]
+      #v(2cm)
+      
+      #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
+      #abstract
+      
+      #v(1.5em)
+      #if keywords.len() > 0 [
+        #text(weight: "bold")[Keywords: ] #keywords.join("; ").
+      ]
+    ]
+  }
+  
+  // LISTA DE ILUSTRAÇÕES
+  if lista-figuras {
+    page[
+      #v(2cm)
+      #align(center)[
+        #text(size: 12pt, weight: "bold")[LISTA DE ILUSTRAÇÕES]
+      ]
+      #v(2cm)
+      
+      #outline(
+        title: none,
+        target: figure.where(kind: image),
+        indent: 0pt,
+      )
+    ]
+  }
+  
+  // LISTA DE TABELAS
+  if lista-tabelas {
+    page[
+      #v(2cm)
+      #align(center)[
+        #text(size: 12pt, weight: "bold")[LISTA DE TABELAS]
+      ]
+      #v(2cm)
+      
+      #outline(
+        title: none,
+        target: figure.where(kind: table),
+        indent: 0pt,
+      )
+    ]
+  }
+  
+  // SUMÁRIO
+  page[
+    #v(2cm)
+    #align(center)[
+      #text(size: 12pt, weight: "bold")[SUMÁRIO]
+    ]
+    #v(2cm)
+    
+    #show outline.entry.where(level: 1): it => {
+      v(0.65em)
+      text(weight: "bold", upper(it))
+    }
+    
+    #show outline.entry.where(level: 2): it => {
+      v(0.65em)
+      upper(it)
+    }
+    
+    #show outline.entry.where(level: 3): it => {
+      v(0.65em)
+      text(weight: "bold", it)
+    }
+    
+    #show outline.entry.where(level: 4): it => {
+      v(0.65em)
+      it
+    }
+    
+    #show outline.entry.where(level: 5): it => {
+      v(0.65em)
+      it
+    }
+    
+    #outline(
+      title: none,
+      indent: 0pt,
+      depth: 5,
+    )
+  ]
+  
+  // Configuração para corpo do documento (paginação conforme seção 2.3)
+  set page(numbering: "1")
   
   counter(page).update(1)
   
   // Configurações de bibliografia (conforme seção 3.16)
   if bibliografia != none {
     show bibliography: set text(size: 12pt)
-    show bibliography: set par(leading: 0.5em, first-line-indent: 0cm) // Espaçamento simples
+    show bibliography: set par(
+      leading: 0.5em,         // Espaçamento simples conforme Quadro 1
+      first-line-indent: 0cm, // Alinhado à esquerda
+      justify: false,         // Texto alinhado à esquerda
+      hanging-indent: 0pt     // Sem recuo pendente por enquanto
+    )
   }
   
-  // Corpo do documento (conforme seção 3.15)
+  // Corpo do documento
   body
   
   // REFERÊNCIAS (conforme seção 3.16 e Imagem 19)
@@ -588,4 +563,68 @@
       style: "associacao-brasileira-de-normas-tecnicas",
     )
   }
+  
+  // APÊNDICE A
+  pagebreak()
+  v(2cm)
+  align(center)[
+    #text(size: 12pt, weight: "bold")[APÊNDICE A – CÓDIGO FONTE DA SIMULAÇÃO]
+  ]
+  v(2cm)
+  
+  set par(first-line-indent: 1.25cm, justify: true, leading: 0.65em)
+  
+  [Este apêndice apresenta o código fonte utilizado nas simulações das antenas desenvolvidas neste trabalho.
+  
+  O código foi implementado em CST Microwave Studio utilizando VBA Script para automatização dos parâmetros de simulação.]
+  
+  v(1em)
+  rect(width: 100%, inset: 1em, stroke: 1pt)[
+    #set text(size: 10pt)
+    #set par(first-line-indent: 0cm)
+    [' Código VBA para automação da simulação
+    Sub Main()
+        Dim frequency As Double
+        frequency = 3.5 ' GHz
+        
+        ' Configurar parâmetros da antena
+        SetParameter("freq", frequency)
+        SetParameter("substrate_height", 1.575)
+        
+        ' Executar simulação
+        Solver.Start
+    End Sub]
+  ]
+  
+  v(1em)
+  [O código permite a variação automática dos parâmetros geométricos da antena para otimização do desempenho.]
+  
+  // ANEXO A  
+  pagebreak()
+  v(2cm)
+  align(center)[
+    #text(size: 12pt, weight: "bold")[ANEXO A – DATASHEET DO SUBSTRATO ROGERS RT/DUROID 5880]
+  ]
+  v(2cm)
+  
+  set par(first-line-indent: 1.25cm, justify: true, leading: 0.65em)
+  
+  [Este anexo apresenta as especificações técnicas completas do substrato Rogers RT/duroid 5880 utilizado na fabricação das antenas.
+  
+  *Especificações Técnicas:*
+  
+  - Constante dielétrica (εr): 2,20 ± 0,02
+  - Tangente de perda: 0,0009 em 10 GHz
+  - Espessura disponível: 0,508 mm a 3,175 mm
+  - Temperatura de operação: -55°C a +125°C
+  - Coeficiente de expansão térmica: 31 ppm/°C
+  
+  *Aplicações Recomendadas:*
+  
+  - Antenas de alta frequência
+  - Circuitos de micro-ondas
+  - Sistemas de comunicação móvel
+  - Dispositivos para 5G
+  
+  As propriedades dielétricas estáveis em ampla faixa de frequência tornam este substrato ideal para aplicações em sistemas de comunicação móvel de quinta geração.]
 }

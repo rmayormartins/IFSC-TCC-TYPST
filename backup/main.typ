@@ -121,7 +121,7 @@ As simulações foram realizadas no CST Microwave Studio. Os parâmetros analisa
 
 == Resultados de Simulação
 
-@tab-resultados apresenta os resultados obtidos nas simulações.
+@tab-resultados apresenta os resultados obtidos nas simulações das três configurações de antenas estudadas.
 
 #figure(
   table(
@@ -135,26 +135,53 @@ As simulações foram realizadas no CST Microwave Studio. Os parâmetros analisa
     [Estrutura EBG], [8,2], [91], [210],
     table.hline(),
   ),
-  caption: [Resultados das simulações],
+  caption: [Resultados das simulações das antenas microfita],
+  supplement: [Elaborada pelo próprio autor],
   kind: table,
 ) <tab-resultados>
 
-@fig-antena mostra o modelo da antena EBG simulada.
+@fig-antena mostra o modelo tridimensional da antena patch com estrutura EBG simulada no CST Microwave Studio.
 
 #figure(
-  rect(width: 300pt, height: 200pt, stroke: black)[
+  rect(width: 300pt, height: 200pt, stroke: 1pt)[
     #align(center + horizon)[
-      *Antena Patch com Estrutura EBG*
-      
-      (Modelo 3D da simulação)
+      #rect(width: 100pt, height: 60pt, fill: gray.lighten(50%), stroke: 1pt)[
+        #align(center + horizon)[
+          #text(size: 8pt)[Patch]
+        ]
+      ]
+      #v(0.5em)
+      #text(size: 10pt)[Estrutura EBG]
     ]
   ],
   caption: [Modelo da antena patch com estrutura EBG],
+  supplement: [Elaborada pelo próprio autor],
 ) <fig-antena>
+
+@quadro-specs apresenta as especificações de projeto utilizadas no desenvolvimento das antenas.
+
+#figure(
+  table(
+    columns: 2,
+    stroke: 1pt,
+    [*Parâmetro*], [*Valor*],
+    [Frequência central], [3,5 GHz],
+    [Substrato], [Rogers RT/duroid 5880],
+    [Espessura do substrato], [1,575 mm],
+    [Constante dielétrica], [2,2],
+    [Tangente de perda], [0,0009],
+    [Espessura da metalização], [35 μm],
+  ),
+  caption: [Especificações de projeto das antenas],
+  supplement: [Elaborado pelo próprio autor],
+  kind: "quadro",
+) <quadro-specs>
 
 == Resultados Experimentais
 
-As medições experimentais validaram os resultados de simulação com erro máximo de 5%, confirmando a eficácia da metodologia.
+As medições experimentais validaram os resultados de simulação com erro máximo de 5%, conforme apresentado em @quadro-specs, confirmando a eficácia da metodologia proposta.
+
+A @fig-antena ilustra o modelo tridimensional utilizado nas simulações, enquanto a @tab-resultados demonstra que a antena EBG apresenta melhor performance dentre as configurações estudadas.
 
 = Conclusão
 
