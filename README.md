@@ -11,3 +11,5 @@ Template para trabalhos acadêmicos do IFSC (TCC, artigos, relatórios), desenvo
 📄 Manual de Normalização IFSC (PDF):  
 [https://www.ifsc.edu.br/documents/d/documentos-uteis/manual-de-normalizacao_rev_08abr25-pdf](https://www.ifsc.edu.br/documents/d/documentos-uteis/manual-de-normalizacao_rev_08abr25-pdf)
 
+Versão 0.1: 08/abr/2025
+Versão 0.2: 08/mai/2026
