@@ -1,3 +1,20 @@
+// =============================================================================
+//  IFSC TCC Typst  |  Apresentação (arquivo de exemplo)
+// -----------------------------------------------------------------------------
+//  Arquivo .....: exemplo.typ
+//  Descrição ...: exemplo de uso do tema de slides (ifsc-saojose.typ).
+//                 Copie e edite para montar a sua apresentação de defesa.
+//
+//  Autor .......: Ramon Mayor Martins
+//  Site ........: https://rmayormartins.github.io
+//  E-mail ......: ramon.mayor@ifsc.edu.br
+//  Repositório .: https://github.com/rmayormartins/IFSC-TCC-TYPST
+//
+//  Versão ......: 0.2  (08/jun/2026)
+//  Para ........: Engenharia de Telecomunicações
+//  Licença .....: MIT
+// =============================================================================
+
 #import "ifsc-saojose.typ": *
 
 #show: apresentacao.with(
