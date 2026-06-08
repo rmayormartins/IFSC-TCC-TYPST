@@ -1,6 +1,74 @@
-// ifsc-template.typ - Template para TCC IFSC conforme Manual de Normalização 2025
-// Baseado no Manual de Normalização de Trabalhos Acadêmicos SiBI/IFSC (rev. 08abr25)
+// ifsc-template.typ - Template para TCC IFSC conforme Manual de Normalizacao 2025
+// Baseado no Manual de Normalizacao de Trabalhos Academicos SiBI/IFSC (rev. 08abr25)
+// e na ABNT NBR 14724 / 6024 / 6027 / 6023.
+//
+// Revisao: ajustes de conformidade (paginacao, titulos sem indicativo centralizados,
+// listas de ilustracoes/tabelas automaticas, numeracao de equacoes, hierarquia de
+// secoes, apendices/anexos parametrizados, referencias cruzadas corrigidas).
 
+// =====================================================================
+//  Espacamentos (Quadro 1: texto em 1,5; excecoes em simples)
+// =====================================================================
+#let _esp-texto   = 1.0em    // aproxima o espacamento 1,5 entre linhas
+#let _esp-simples = 0.5em    // espacamento simples (fontes, referencias, natureza...)
+#let _recuo       = 1.25cm   // recuo de primeira linha dos paragrafos
+
+// =====================================================================
+//  Helpers exportados para o corpo / pos-textuais
+// =====================================================================
+
+// Titulo sem indicativo de secao: centralizado, maiusculo, negrito (secao 2.4).
+// Aparece no sumario (e um heading nivel 1 sem numeracao).
+#let titulo-livre(corpo) = heading(level: 1, numbering: none, corpo)
+
+#let apendice(id, titulo, corpo) = {
+  titulo-livre[APÊNDICE #id #sym.dash.en #titulo]
+  corpo
+}
+#let anexo(id, titulo, corpo) = {
+  titulo-livre[ANEXO #id #sym.dash.en #titulo]
+  corpo
+}
+
+// Ilustracao (figura): titulo em cima, fonte embaixo (secao 2.11).
+#let figura(titulo, corpo, fonte: [elaborada pelo próprio autor.]) = figure(
+  {
+    corpo
+    v(0.3em)
+    block(text(size: 10pt)[Fonte: #fonte])
+  },
+  caption: titulo,
+  kind: image,
+  supplement: [Figura],
+)
+
+// Tabela: dados numericos, formato aberto (sem bordas laterais), normas IBGE.
+#let tabela(titulo, corpo, fonte: [elaborada pelo próprio autor.]) = figure(
+  {
+    corpo
+    v(0.3em)
+    block(text(size: 10pt)[Fonte: #fonte])
+  },
+  caption: titulo,
+  kind: table,
+  supplement: [Tabela],
+)
+
+// Quadro: informacoes textuais/comparativas, formato fechado (com bordas).
+#let quadro(titulo, corpo, fonte: [elaborado pelo próprio autor.]) = figure(
+  {
+    corpo
+    v(0.3em)
+    block(text(size: 10pt)[Fonte: #fonte])
+  },
+  caption: titulo,
+  kind: "quadro",
+  supplement: [Quadro],
+)
+
+// =====================================================================
+//  Template principal
+// =====================================================================
 #let ifsc-template(
   titulo: "",
   subtitulo: "",
@@ -14,6 +82,8 @@
   cidade: "São José",
   ano: "",
   mes: "",
+  data-defesa: none,          // ex.: "28 de junho de 2025"
+  banca: (),                  // lista de (nome: .., instituicao: ..)
   dedicatoria: none,
   agradecimentos: none,
   epigrafe: none,
@@ -23,261 +93,196 @@
   keywords: (),
   lista-figuras: false,
   lista-tabelas: false,
+  lista-quadros: false,
   bibliografia: none,
-  body
+  glossario: none,            // conteudo opcional
+  apendices: none,            // conteudo opcional (use a funcao apendice(...))
+  anexos: none,               // conteudo opcional (use a funcao anexo(...))
+  fonte-principal: "Arial",   // Quadro 1: Arial ou Times New Roman
+  body,
 ) = {
-  
-  // Configurações básicas sem show heading
   set document(title: titulo, author: autor)
-  
-  // DIMENSÃO A4 e margens conforme seção 2.2
+
+  // ---------- Pagina e fonte (secoes 2.1 e 2.2) ----------
   set page(
-    paper: "a4", 
+    paper: "a4",
     margin: (top: 3cm, bottom: 2cm, left: 3cm, right: 2cm),
   )
-  
-  // FONTE padrão (conforme Quadro 1)
   set text(
-    size: 12pt, 
-    lang: "pt",
+    font: (fonte-principal, "Liberation Sans", "TeX Gyre Heros", "DejaVu Sans"),
+    size: 12pt,
+    fill: black,
+    lang: "pt", region: "br",
   )
-  
-  // ESPAÇAMENTO: 1,5 conforme Quadro 1
-  set par(
-    justify: true, 
-    leading: 0.65em,
-    first-line-indent: 1.25cm,
-  )
-  
-  // Numeração progressiva conforme seção 2.6
-  set heading(numbering: "1.1.1.1.1")
-  
-  // CAPA
+  set par(justify: true, leading: _esp-texto, first-line-indent: _recuo, spacing: _esp-texto)
+
+  // ---------- Numeracao progressiva (secao 2.6) ----------
+  set heading(numbering: "1.1.1.1.1 ")
+
+  // ---------- Ilustracoes / equacoes (secoes 2.10 e 2.11) ----------
+  set figure.caption(position: top, separator: [#h(0.25em)#sym.dash.en#h(0.25em)])
+  show figure.caption: set text(size: 12pt)
+  show figure.caption: set par(leading: _esp-simples, justify: false)
+  set figure(gap: 0.6em)
+  set math.equation(numbering: "(1)")
+
+  // =================================================================
+  //  ELEMENTOS PRE-TEXTUAIS
+  // =================================================================
+
+  // ---------- CAPA (nao contada, nao numerada) ----------
   page[
-    #set par(leading: 0.65em, first-line-indent: 0cm)
+    #set par(leading: _esp-texto, first-line-indent: 0cm)
     #align(center + horizon)[
       #v(-2cm)
-      
       #text(weight: "bold", size: 12pt)[
         INSTITUTO FEDERAL DE SANTA CATARINA
-        
+
         CAMPUS #upper(campus)
-        
+
         CURSO DE #upper(curso)
       ]
-      
       #v(4cm)
-      
       #text(size: 12pt)[#upper(autor)]
-      
       #v(4cm)
-      
       #block(width: 85%)[
         #set text(size: 12pt, weight: "bold")
-        #set par(leading: 0.65em)
+        #set par(leading: _esp-texto)
         #align(center)[
           #upper(titulo)
-          #if subtitulo != "" [
-            #linebreak()
-            #upper(subtitulo)
-          ]
+          #if subtitulo != "" [#linebreak() #upper(subtitulo)]
         ]
       ]
-      
       #v(1fr)
-      
-      #text(size: 12pt)[
-        #upper(cidade)
-        
-        #ano
-      ]
+      #text(size: 12pt)[#upper(cidade) #linebreak() #ano]
     ]
   ]
-  
-  // FOLHA DE ROSTO
+
+  // A contagem comeca na folha de rosto (secao 2.3): zera aqui.
+  counter(page).update(1)
+
+  // ---------- FOLHA DE ROSTO ----------
   page[
-    #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
+    #set par(first-line-indent: 0cm, justify: true, leading: _esp-texto)
     #v(2cm)
-    
-    #align(center)[
-      #text(size: 12pt)[#upper(autor)]
-    ]
-    
+    #align(center)[#text(size: 12pt)[#upper(autor)]]
     #v(4cm)
-    
     #align(center)[
       #block(width: 85%)[
         #set text(size: 12pt, weight: "bold")
-        #set par(leading: 0.65em)
+        #set par(leading: _esp-texto)
         #align(center)[
           #upper(titulo)
-          #if subtitulo != "" [
-            #linebreak()
-            #upper(subtitulo)
-          ]
+          #if subtitulo != "" [#linebreak() #upper(subtitulo)]
         ]
       ]
     ]
-    
     #v(2.5cm)
-    
     #align(right)[
       #box(width: 8.5cm)[
-        #set par(first-line-indent: 0cm, justify: true, leading: 0.5em)
+        #set par(first-line-indent: 0cm, justify: true, leading: _esp-simples)
         #set text(size: 10pt)
-        #tipo-trabalho apresentado ao Curso de #curso do Instituto Federal de Santa Catarina, Campus #campus, como requisito parcial para obtenção do título de #grau.
-        
-        #if orientador != "" [
-          #v(1em)
-          Orientador: #orientador
-        ]
-        
-        #if coorientador != "" [
-          #v(0.5em)
-          Coorientador: #coorientador
-        ]
+        #tipo-trabalho apresentado ao Curso de #curso do Instituto Federal de
+        Santa Catarina, Campus #campus, como requisito parcial para obtencao do
+        titulo de #grau.
+        #if orientador != "" [#v(1em) Orientador: #orientador]
+        #if coorientador != "" [#v(0.5em) Coorientador: #coorientador]
       ]
     ]
-    
     #v(1fr)
-    
-    #align(center)[
-      #text(size: 12pt)[
-        #upper(cidade)
-        
-        #ano
-      ]
-    ]
+    #align(center)[#text(size: 12pt)[#upper(cidade) #linebreak() #ano]]
   ]
-  
-  // FICHA CATALOGRÁFICA
+
+  // ---------- FICHA CATALOGRAFICA (fonte 10, simples) ----------
   page[
     #v(1fr)
     #align(center)[
       #rect(width: 12cm, height: 8cm, stroke: 1pt)[
-        #set text(size: 9pt)
-        #set par(leading: 0.5em, first-line-indent: 0cm)
+        #set text(size: 10pt)
+        #set par(leading: _esp-simples, first-line-indent: 0cm)
         #align(left)[
-          #v(0.5cm)
-          #h(0.5cm)
-          *Dados Internacionais de Catalogação na Publicação (CIP)*
-          
+          #v(0.5cm) #h(0.5cm)
+          *Dados Internacionais de Catalogacao na Publicacao (CIP)*
           #v(1cm)
-          
-          A000a  #h(0.5cm) #autor
-          
+          A000a #h(0.5cm) #autor
           #h(1.5cm) #titulo #if subtitulo != "" [ : #subtitulo] / #autor. -- #cidade : Instituto Federal de Santa Catarina, #ano.
-          
           #h(1.5cm) XXX f. : il.
-          
           #v(0.5cm)
-          
           #h(1.5cm) #tipo-trabalho -- Instituto Federal de Santa Catarina, Campus #campus, Curso de #curso, #ano.
-          
           #h(1.5cm) Orientador: #orientador
-          
-          #if coorientador != "" [
-            #h(1.5cm) Coorientador: #coorientador
-          ]
-          
+          #if coorientador != "" [#h(1.5cm) Coorientador: #coorientador]
           #v(0.5cm)
-          
-          #h(1.5cm) 1. Telecomunicações. 2. Engenharia. I. Título.
-          
+          #h(1.5cm) 1. Telecomunicacoes. 2. Engenharia. I. Titulo.
           #v(1cm)
-          
           #h(8cm) CDD XXX.XX
         ]
       ]
     ]
     #v(0.5cm)
-    #align(center)[
-      #text(size: 8pt)[
-        Ficha catalográfica elaborada pela Biblioteca do IFSC Campus #campus
-      ]
-    ]
+    #align(center)[#text(size: 8pt)[Ficha catalografica elaborada pela Biblioteca do IFSC Campus #campus]]
   ]
-  
-  // FOLHA DE APROVAÇÃO
+
+  // ---------- FOLHA DE APROVACAO ----------
   page[
-    #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
+    #set par(first-line-indent: 0cm, justify: true, leading: _esp-texto)
     #v(2cm)
-    
-    #align(center)[
-      #text(size: 12pt)[#upper(autor)]
-    ]
-    
+    #align(center)[#text(size: 12pt)[#upper(autor)]]
     #v(2cm)
-    
     #align(center)[
       #block(width: 85%)[
         #set text(size: 12pt, weight: "bold")
-        #set par(leading: 0.65em)
+        #set par(leading: _esp-texto)
         #align(center)[
           #upper(titulo)
-          #if subtitulo != "" [
-            #linebreak()
-            #upper(subtitulo)
-          ]
+          #if subtitulo != "" [#linebreak() #upper(subtitulo)]
         ]
       ]
     ]
-    
     #v(1.5cm)
-    
-    // Natureza do trabalho alinhada à direita conforme manual
     #align(right)[
       #box(width: 8.5cm)[
-        #set par(first-line-indent: 0cm, justify: true, leading: 0.5em)
+        #set par(first-line-indent: 0cm, justify: true, leading: _esp-simples)
         #set text(size: 10pt)
-        Este #tipo-trabalho foi julgado adequado para obtenção do título de #grau e aprovado em sua forma final pelo Curso de #curso do Instituto Federal de Santa Catarina, Campus #campus.
+        Este #tipo-trabalho foi julgado adequado para obtencao do titulo de
+        #grau e aprovado em sua forma final pelo Curso de #curso do Instituto
+        Federal de Santa Catarina, Campus #campus.
       ]
     ]
-    
     #v(1cm)
-    
     #align(center)[
-      São José, 28 de junho de 2025.
+      #cidade, #if data-defesa != none [#data-defesa] else [\_\_\_ de \_\_\_\_\_\_\_\_\_\_ de #ano].
     ]
-    
     #v(2cm)
-    
     #align(center)[
-      #set par(leading: 1.5em)
-      
+      #set par(leading: _esp-texto)
       #line(length: 8cm)
-      
-      #orientador
-      
-      Instituto Federal de Santa Catarina
-      
-      Orientador
-      
-      #v(1.5cm)
-      
-      #line(length: 8cm)
-      
-      Prof. Dr. Nome do Examinador 1
-      
-      Instituição
-      
-      #v(1.5cm)
-      
-      #line(length: 8cm)
-      
-      Prof. Dr. Nome do Examinador 2
-      
-      Instituição
+      #if orientador != "" [#orientador] else [Prof. Dr. Nome do Orientador]
+      #linebreak() Instituto Federal de Santa Catarina
+      #linebreak() Orientador
+      #v(1.2cm)
+      #if banca.len() > 0 [
+        #for membro in banca [
+          #line(length: 8cm)
+          #membro.nome #linebreak() #membro.instituicao
+          #v(1.2cm)
+        ]
+      ] else [
+        #line(length: 8cm)
+        Prof. Dr. Nome do Examinador 1 #linebreak() Instituicao
+        #v(1.2cm)
+        #line(length: 8cm)
+        Prof. Dr. Nome do Examinador 2 #linebreak() Instituicao
+      ]
     ]
   ]
-  
-  // DEDICATÓRIA
+
+  // ---------- DEDICATORIA (opcional, sem titulo) ----------
   if dedicatoria != none {
     page[
       #v(1fr)
       #align(right)[
         #box(width: 8cm)[
-          #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
+          #set par(first-line-indent: 0cm, justify: true, leading: _esp-texto)
           #set text(style: "italic")
           #dedicatoria
         ]
@@ -285,28 +290,25 @@
       #v(2cm)
     ]
   }
-  
-  // AGRADECIMENTOS
+
+  // ---------- AGRADECIMENTOS (titulo centralizado, maiusc., negrito) ----------
   if agradecimentos != none {
     page[
       #v(2cm)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[AGRADECIMENTOS]
-      ]
+      #align(center)[#text(size: 12pt, weight: "bold")[AGRADECIMENTOS]]
       #v(2cm)
-      
-      #set par(first-line-indent: 1.25cm, justify: true, leading: 0.65em)
+      #set par(first-line-indent: _recuo, justify: true, leading: _esp-texto)
       #agradecimentos
     ]
   }
-  
-  // EPÍGRAFE
+
+  // ---------- EPIGRAFE (opcional, sem titulo) ----------
   if epigrafe != none {
     page[
       #v(1fr)
       #align(right)[
         #box(width: 8cm)[
-          #set par(first-line-indent: 0cm, justify: false, leading: 0.65em)
+          #set par(first-line-indent: 0cm, justify: false, leading: _esp-texto)
           #set text(style: "italic")
           #epigrafe
         ]
@@ -314,317 +316,146 @@
       #v(2cm)
     ]
   }
-  
-  // RESUMO
+
+  // ---------- RESUMO ----------
   if resumo != none {
     page[
       #v(2cm)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[RESUMO]
-      ]
+      #align(center)[#text(size: 12pt, weight: "bold")[RESUMO]]
       #v(2cm)
-      
-      #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
+      #set par(first-line-indent: 0cm, justify: true, leading: _esp-texto)
       #resumo
-      
       #v(1.5em)
       #if palavras-chave.len() > 0 [
-        #text(weight: "bold")[Palavras-chave: ] #palavras-chave.join("; ").
+        #text(weight: "bold")[Palavras-chave:] #palavras-chave.join("; ").
       ]
     ]
   }
-  
-  // ABSTRACT
+
+  // ---------- ABSTRACT ----------
   if abstract != none {
     page[
       #v(2cm)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[ABSTRACT]
-      ]
+      #align(center)[#text(size: 12pt, weight: "bold")[ABSTRACT]]
       #v(2cm)
-      
-      #set par(first-line-indent: 0cm, justify: true, leading: 0.65em)
+      #set par(first-line-indent: 0cm, justify: true, leading: _esp-texto)
       #abstract
-      
       #v(1.5em)
       #if keywords.len() > 0 [
-        #text(weight: "bold")[Keywords: ] #keywords.join("; ").
+        #text(weight: "bold")[Keywords:] #keywords.join("; ").
       ]
     ]
   }
-  
-  // LISTA DE ILUSTRAÇÕES - simplificada
+
+  // ---------- LISTA DE ILUSTRACOES (automatica) ----------
   if lista-figuras {
     page[
       #v(2cm)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[LISTA DE ILUSTRAÇÕES]
-      ]
+      #align(center)[#text(size: 12pt, weight: "bold")[LISTA DE ILUSTRAÇÕES]]
       #v(2cm)
-      
-      // Lista manual das figuras (sem colchetes)
-      Figura 1 – Modelo da antena patch com estrutura EBG #box(width: 1fr, repeat[.]) 4
+      #outline(title: none, target: figure.where(kind: image))
     ]
   }
-  
-  // LISTA DE TABELAS - simplificada
+
+  // ---------- LISTA DE TABELAS (automatica) ----------
   if lista-tabelas {
     page[
       #v(2cm)
-      #align(center)[
-        #text(size: 12pt, weight: "bold")[LISTA DE TABELAS]  
-      ]
+      #align(center)[#text(size: 12pt, weight: "bold")[LISTA DE TABELAS]]
       #v(2cm)
-      
-      // Lista manual das tabelas (sem colchetes)
-      Tabela 1 – Resultados das simulações das antenas microfita #box(width: 1fr, repeat[.]) 4
+      #outline(title: none, target: figure.where(kind: table))
     ]
   }
-  
-  // SUMÁRIO
+
+  // ---------- LISTA DE QUADROS (automatica, opcional) ----------
+  if lista-quadros {
+    page[
+      #v(2cm)
+      #align(center)[#text(size: 12pt, weight: "bold")[LISTA DE QUADROS]]
+      #v(2cm)
+      #outline(title: none, target: figure.where(kind: "quadro"))
+    ]
+  }
+
+  // ---------- SUMARIO (secao 3.14) ----------
   page[
     #v(2cm)
-    #align(center)[
-      #text(size: 12pt, weight: "bold")[SUMÁRIO]
-    ]
+    #align(center)[#text(size: 12pt, weight: "bold")[SUMÁRIO]]
     #v(2cm)
-    
-    #show outline.entry.where(level: 1): it => {
-      v(0.65em)
-      // Verifica se tem numeração ou não
-      if it.element.numbering != none [
-        text(weight: "bold", upper(it))
-      ] else [
-        text(weight: "bold", it) // Para APÊNDICE, ANEXO, REFERÊNCIAS (sem upper)
-      ]
-    }
-    
-    #show outline.entry.where(level: 2): it => {
-      v(0.65em)
-      upper(it)
-    }
-    
-    #show outline.entry.where(level: 3): it => {
-      v(0.65em)
-      text(weight: "bold", it)
-    }
-    
-    #show outline.entry.where(level: 4): it => {
-      v(0.65em)
-      it
-    }
-    
-    #show outline.entry.where(level: 5): it => {
-      v(0.65em)
-      it
-    }
-    
-    #outline(
-      title: none,
-      indent: 0pt,
-      depth: 5,
-    )
+    #show outline.entry.where(level: 1): it => { v(_esp-texto, weak: true); strong(upper(it)) }
+    #show outline.entry.where(level: 2): it => { v(0.4em, weak: true); upper(it) }
+    #outline(title: none, indent: 0pt, depth: 5)
   ]
-  
-  // Configuração para corpo do documento (paginação conforme seção 2.3)
+
+  // =================================================================
+  //  CONFIGURACAO DA PARTE TEXTUAL
+  // =================================================================
+
+  // Paginacao: numero so a partir da introducao (primeira pagina textual),
+  // no canto superior direito, fonte 10, recuo de 2 cm (secao 2.3).
   set page(
-    header: context {
-      let page-num = counter(page).get().first()
-      if page-num >= 1 {
-        align(right, text(size: 10pt, str(page-num)))
-      }
-    },
-    header-ascent: 2cm, // Recuo de 2cm da margem superior
+    header: context align(right, text(size: 10pt, str(counter(page).get().first()))),
+    header-ascent: 1cm,   // 3cm (margem) - 1cm => numero a ~2cm da borda superior
   )
-  
-  counter(page).update(1)
-  
-  // CONFIGURAÇÕES DE FORMATAÇÃO (após sumário)
-  // SEÇÃO PRIMÁRIA
+
+  // Hierarquia de secoes (secao 2.6 / Quadro 2):
+  //  1a  MAIUSCULA negrito | 2a MAIUSCULA | 3a Versalete negrito
+  //  4a  normal | 5a italico  (sempre alinhadas a esquerda)
+  let _sec(it, transform, peso, estilo) = {
+    block(width: 100%, breakable: false)[
+      #set text(size: 12pt, weight: peso, style: estilo)
+      #set par(first-line-indent: 0cm, leading: _esp-texto, justify: false)
+      #if it.numbering != none [#counter(heading).display() #h(0.4em)]
+      #transform(it.body)
+    ]
+  }
+
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
     v(2cm)
-    block[
-      #set text(size: 12pt, weight: "bold")
-      #set par(first-line-indent: 0cm, leading: 0.65em)
-      #if it.numbering != none [
-        #counter(heading).display()
-        #h(1em)
+    if it.numbering != none {
+      _sec(it, upper, "bold", "normal")
+    } else {
+      // titulo sem indicativo: centralizado (secao 2.4)
+      block(width: 100%)[
+        #set text(size: 12pt, weight: "bold")
+        #set par(first-line-indent: 0cm, leading: _esp-texto)
+        #align(center)[#upper(it.body)]
       ]
-      #upper(it.body)
-    ]
+    }
     v(1cm)
   }
-  
-  // SEÇÃO SECUNDÁRIA
-  show heading.where(level: 2): it => {
-    v(0.65em)
-    block[
-      #set text(size: 12pt, weight: "bold")
-      #set par(first-line-indent: 0cm, leading: 0.65em)
-      #if it.numbering != none [
-        #counter(heading).display()
-        #h(1em)
-      ]
-      #upper(it.body)
-    ]
-    v(0.65em)
-  }
-  
-  // Seções terciária, quaternária e quinária
-  show heading.where(level: 3): it => {
-    v(0.65em)
-    block[
-      #set text(size: 12pt, weight: "bold")
-      #set par(first-line-indent: 0cm, leading: 0.65em)
-      #if it.numbering != none [
-        #counter(heading).display()
-        #h(1em)
-      ]
-      #it.body
-    ]
-    v(0.65em)
-  }
-  
-  show heading.where(level: 4): it => {
-    v(0.65em)
-    block[
-      #set text(size: 12pt, weight: "bold")
-      #set par(first-line-indent: 0cm, leading: 0.65em)
-      #if it.numbering != none [
-        #counter(heading).display()
-        #h(1em)
-      ]
-      #it.body
-    ]
-    v(0.65em)
-  }
-  
-  show heading.where(level: 5): it => {
-    v(0.65em)
-    block[
-      #set text(size: 12pt, weight: "bold")
-      #set par(first-line-indent: 0cm, leading: 0.65em)
-      #if it.numbering != none [
-        #counter(heading).display()
-        #h(1em)
-      ]
-      #it.body
-    ]
-    v(0.65em)
-  }
-  
-  // Configuração limpa de figuras e tabelas
-  show figure: it => [
-    #v(1em)
-    #align(center)[
-      #if it.kind == table [
-        #strong[Tabela #counter(figure.where(kind: table)).display() – #it.caption.body]
-      ] else if it.kind == "quadro" [
-        #strong[Quadro #counter(figure.where(kind: "quadro")).display() – #it.caption.body]
-      ] else [
-        #strong[Figura #counter(figure.where(kind: image)).display() – #it.caption.body]
-      ]
-      
-      #it.body
-      #v(0.5em)
-      
-      #text(size: 10pt)[
-        Fonte: #if it.supplement != none [#it.supplement] else [elaborado pelo próprio autor.]
-      ]
-    ]
-    #v(1em)
-  ]
-  
-  // Configuração de equações
-  show math.equation.where(block: true): it => {
-    v(1em)
-    align(center)[#it]
-    v(1em)
-  }
-  
-  // Configurações de bibliografia (após sumário)
-  if bibliografia != none {
-    show bibliography: set text(size: 12pt)
-    show bibliography: set par(
-      leading: 0.5em,         // Espaçamento simples conforme Quadro 1
-      first-line-indent: 0cm, // Alinhado à esquerda
-      justify: false,         // Texto alinhado à esquerda
-      hanging-indent: 0pt     // Sem recuo pendente por enquanto
-    )
-  }
-  
-  // Corpo do documento
+  show heading.where(level: 2): it => { v(_esp-texto); _sec(it, upper, "regular", "normal"); v(_esp-simples) }
+  show heading.where(level: 3): it => { v(_esp-texto); _sec(it, x => x, "bold", "normal"); v(_esp-simples) }
+  show heading.where(level: 4): it => { v(_esp-texto); _sec(it, x => x, "regular", "normal"); v(_esp-simples) }
+  show heading.where(level: 5): it => { v(_esp-texto); _sec(it, x => x, "regular", "italic"); v(_esp-simples) }
+
+  // Referencias: fonte 12, espacamento simples, alinhado a esquerda (secao 3.16)
+  show bibliography: set text(size: 12pt)
+  show bibliography: set par(leading: _esp-simples, first-line-indent: 0cm, justify: false)
+
+  // ---------- CORPO ----------
   body
-  
-  // REFERÊNCIAS (conforme seção 3.16 e Imagem 19) - como heading para o sumário
+
+  // =================================================================
+  //  ELEMENTOS POS-TEXTUAIS
+  // =================================================================
+
+  // REFERENCIAS (titulo sem indicativo, centralizado)
   if bibliografia != none {
-    pagebreak()
-    heading(level: 1, numbering: none)[REFERÊNCIAS]
-    v(2cm)
-    
-    bibliography(
-      bibliografia,
-      title: none,
-      style: "associacao-brasileira-de-normas-tecnicas",
-    )
+    titulo-livre[REFERÊNCIAS]
+    bibliography(bibliografia, title: none, style: "associacao-brasileira-de-normas-tecnicas")
   }
-  
-  // APÊNDICE A - como heading para aparecer no sumário
-  pagebreak()
-  heading(level: 1, numbering: none)[APÊNDICE A – CÓDIGO FONTE DA SIMULAÇÃO]
-  v(2cm)
-  
-  set par(first-line-indent: 1.25cm, justify: true, leading: 0.65em)
-  
-  [Este apêndice apresenta o código fonte utilizado nas simulações das antenas desenvolvidas neste trabalho.
-  
-  O código foi implementado em CST Microwave Studio utilizando VBA Script para automatização dos parâmetros de simulação.]
-  
-  v(1em)
-  rect(width: 100%, inset: 1em, stroke: 1pt)[
-    #set text(size: 10pt)
-    #set par(first-line-indent: 0cm)
-    [' Código VBA para automação da simulação
-    Sub Main()
-        Dim frequency As Double
-        frequency = 3.5 ' GHz
-        
-        ' Configurar parâmetros da antena
-        SetParameter("freq", frequency)
-        SetParameter("substrate_height", 1.575)
-        
-        ' Executar simulação
-        Solver.Start
-    End Sub]
-  ]
-  
-  v(1em)
-  [O código permite a variação automática dos parâmetros geométricos da antena para otimização do desempenho.]
-  
-  // ANEXO A - como heading para aparecer no sumário
-  pagebreak()
-  heading(level: 1, numbering: none)[ANEXO A – DATASHEET DO SUBSTRATO ROGERS RT/DUROID 5880]
-  v(2cm)
-  
-  set par(first-line-indent: 1.25cm, justify: true, leading: 0.65em)
-  
-  [Este anexo apresenta as especificações técnicas completas do substrato Rogers RT/duroid 5880 utilizado na fabricação das antenas.
-  
-  *Especificações Técnicas:*
-  
-  - Constante dielétrica (εr): 2,20 ± 0,02
-  - Tangente de perda: 0,0009 em 10 GHz
-  - Espessura disponível: 0,508 mm a 3,175 mm
-  - Temperatura de operação: -55°C a +125°C
-  - Coeficiente de expansão térmica: 31 ppm/°C
-  
-  *Aplicações Recomendadas:*
-  
-  - Antenas de alta frequência
-  - Circuitos de micro-ondas
-  - Sistemas de comunicação móvel
-  - Dispositivos para 5G
-  
-  As propriedades dielétricas estáveis em ampla faixa de frequência tornam este substrato ideal para aplicações em sistemas de comunicação móvel de quinta geração.]
+
+  // GLOSSARIO (opcional)
+  if glossario != none {
+    titulo-livre[GLOSSÁRIO]
+    glossario
+  }
+
+  // APENDICES (opcional) - use a funcao apendice(id, titulo)[...]
+  if apendices != none { apendices }
+
+  // ANEXOS (opcional) - use a funcao anexo(id, titulo)[...]
+  if anexos != none { anexos }
 }
