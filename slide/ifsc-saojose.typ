@@ -1,21 +1,33 @@
-// =====================================================================
-//  Template Typst - Apresentacoes IFSC Campus Sao Jose
-//  Inspirado no tema Beamer institucional usado nos TCCs.
+// =============================================================================
+//  IFSC TCC Typst  |  Modelo de apresentação (slides, tema IFSC)
+// -----------------------------------------------------------------------------
+//  Arquivo .....: ifsc-saojose.typ
+//  Descrição ...: tema dos slides de defesa (estilo beamer institucional IFSC),
+//                 inspirado no padrão usado nos TCCs do Campus São José.
 //
+//  Autor .......: Ramon Mayor Martins
+//  Site ........: https://rmayormartins.github.io
+//  E-mail ......: ramon.mayor@ifsc.edu.br
+//  Repositório .: https://github.com/rmayormartins/IFSC-TCC-TYPST
+// 
+//  Versão ......: 0.2  (08/jun/2026)
+//  Para ........: Engenharia de Telecomunicações
+//  Licença .....: MIT
+// -----------------------------------------------------------------------------
 //  Como usar (ver exemplo.typ):
 //     #import "ifsc-saojose.typ": *
 //     #show: apresentacao.with(logo: image("logo-ifsc.png", height: 1.1cm))
 //     #slide-titulo(titulo: "...", autores: ("Fulano",), ...)
 //     #slide(titulo: "Motivacao")[ ... ]
 //
-//  Funcoes disponiveis:
-//     apresentacao(..)   -> configuracao global (aplicar com #show:)
+//  Funções disponíveis:
+//     apresentacao(..)   -> configuração global (aplicar com #show:)
 //     slide-titulo(..)   -> slide de abertura
-//     slide(titulo: ..)  -> slide de conteudo
+//     slide(titulo: ..)  -> slide de conteúdo
 //     bloco(titulo: ..)  -> caixa destacada (estilo "Objetivo Geral")
-//     tabela-resultados()-> tabela estilo booktabs (cabecalho verde)
+//     tabela-resultados()-> tabela estilo booktabs (cabeçalho verde)
 //     fonte(..)          -> legenda de figura ("Fonte: ...")
-// =====================================================================
+// =============================================================================
 
 // ---------- Paleta institucional ----------
 #let ifsc-verde         = rgb("#23553A")   // verde das barras e titulos
