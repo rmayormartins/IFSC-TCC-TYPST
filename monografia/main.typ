@@ -1,5 +1,19 @@
-// main.typ - Template TCC Engenharia de Telecomunicacoes IFSC
-// Conforme Manual de Normalizacao SiBI/IFSC (rev. 08abr25)
+// =============================================================================
+//  IFSC TCC Typst  |  Monografia (arquivo de conteúdo)
+// -----------------------------------------------------------------------------
+//  Arquivo .....: main.typ
+//  Descrição ...: conteúdo do trabalho. Edite este arquivo (os metadados no
+//                 ifsc-template.with(...) e o texto das seções).
+//
+//  Autor .......: Ramon Mayor Martins
+//  Site ........: https://rmayormartins.github.io
+//  E-mail ......: ramon.mayor@ifsc.edu.br
+//  Repositório .: https://github.com/rmayormartins/IFSC-TCC-TYPST
+//
+//  Versão ......: 0.2  (08/jun/2026)
+//  Para ........: Engenharia de Telecomunicações
+//  Licença .....: MIT
+// =============================================================================
 
 #import "ifsc-template.typ": *
 
