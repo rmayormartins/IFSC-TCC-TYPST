@@ -1,10 +1,25 @@
-// ifsc-template.typ - Template para TCC IFSC conforme Manual de Normalizacao 2025
-// Baseado no Manual de Normalizacao de Trabalhos Academicos SiBI/IFSC (rev. 08abr25)
-// e na ABNT NBR 14724 / 6024 / 6027 / 6023.
+// =============================================================================
+//  IFSC TCC Typst  |  Modelo de monografia (ABNT / IFSC)
+// -----------------------------------------------------------------------------
+//  Arquivo .....: ifsc-template.typ
+//  Descrição ...: tema e regras de formatação da monografia, conforme o
+//                 Manual de Normalização SiBI/IFSC (rev. 08/abr/2025) e a
+//                 ABNT NBR 14724, 6024, 6027 e 6023.
 //
-// Revisao: ajustes de conformidade (paginacao, titulos sem indicativo centralizados,
-// listas de ilustracoes/tabelas automaticas, numeracao de equacoes, hierarquia de
-// secoes, apendices/anexos parametrizados, referencias cruzadas corrigidas).
+//  Autor .......: Ramon Mayor Martins
+//  Site ........: https://rmayormartins.github.io
+//  E-mail ......: ramon.mayor@ifsc.edu.br
+//  Repositório .: https://github.com/rmayormartins/IFSC-TCC-TYPST
+//
+//  Versão ......: 0.2  (08/jun/2026)
+//  Para ........: Engenharia de Telecomunicações
+//  Licença .....: MIT
+// -----------------------------------------------------------------------------
+//  Notas desta versão: paginação ABNT; títulos sem indicativo centralizados;
+//  listas de ilustrações/tabelas/quadros automáticas; numeração de equações;
+//  funções figura/tabela/quadro com fonte e referência cruzada; apêndices e
+//  anexos parametrizados; hierarquia de seções por nível.
+// =============================================================================
 
 // =====================================================================
 //  Espacamentos (Quadro 1: texto em 1,5; excecoes em simples)
