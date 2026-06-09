@@ -1,6 +1,6 @@
 # IFSC TCC Typst
 
-Modelos em [Typst](https://typst.app) para trabalhos acadêmicos do **IFSC** (TCC, artigos e relatórios) e para a **apresentação de defesa**, formatados conforme o *Manual de Normalização de Trabalhos Acadêmicos* do SiBI/IFSC (rev. 08/abr/2025) e a ABNT (NBR 14724, 6024, 6027 e 6023).
+Modelos em [Typst](https://typst.app) para trabalhos acadêmicos do **IFSC** (TCC, monografia) e para a **apresentação de defesa**, formatados conforme o *Manual de Normalização de Trabalhos Acadêmicos* do SiBI/IFSC (rev. 08/abr/2025) e a ABNT (NBR 14724, 6024, 6027 e 6023).
 
 ![Typst](https://img.shields.io/badge/feito%20com-Typst-239DAD)
 ![Norma](https://img.shields.io/badge/norma-ABNT%20%2F%20IFSC-2E7D46)
@@ -10,7 +10,7 @@ O repositório traz dois modelos independentes:
 
 | Modelo | Para que serve | Arquivos |
 | --- | --- | --- |
-| 📘 **Monografia** | TCC, relatório ou artigo (documento ABNT) | `ifsc-template.typ`, `main.typ`, `referencias.bib` |
+| 📘 **Monografia** | TCC, monografia (documento ABNT) | `ifsc-template.typ`, `main.typ`, `referencias.bib` |
 | 🎞️ **Apresentação** | Slides de defesa (tema institucional, estilo *beamer* IFSC) | `ifsc-saojose.typ`, `exemplo.typ` |
 
 ---
