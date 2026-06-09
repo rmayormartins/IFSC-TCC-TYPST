@@ -15,6 +15,33 @@ O repositório traz dois modelos independentes:
 
 ---
 
+## 📸 Pré-visualização
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/img/mono2.png" alt="Monografia - capa" width="100%"><br>
+      <sub><b>Monografia</b> · capa</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/img/mono1.png" alt="Monografia - sumário" width="100%"><br>
+      <sub><b>Monografia</b> · sumário</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/img/slide2.png" alt="Apresentação - slide de título" width="100%"><br>
+      <sub><b>Apresentação</b> · slide de título</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/img/slide1.png" alt="Apresentação - slide de conteúdo" width="100%"><br>
+      <sub><b>Apresentação</b> · slide de conteúdo</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 🔗 Links
 
 - Projeto online (monografia): https://typst.app/project/rky5kIhcFlEUHSEkd1hHzY
@@ -53,6 +80,13 @@ IFSC-TCC-TYPST/
 ├── apresentacao/
 │   ├── ifsc-saojose.typ      # tema dos slides (não precisa editar)
 │   └── exemplo.typ           # modelo de uso dos slides
+├── docs/
+│   └── img/                  # capturas usadas no README
+│       ├── mono1.png
+│       ├── mono2.png
+│       ├── slide1.png
+│       └── slide2.png
+├── LICENSE
 └── README.md
 ```
 
