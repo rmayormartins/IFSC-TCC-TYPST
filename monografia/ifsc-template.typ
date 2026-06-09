@@ -12,7 +12,6 @@
 //  Repositório .: https://github.com/rmayormartins/IFSC-TCC-TYPST
 //
 //  Versão ......: 0.2  (08/jun/2026)
-//  Para ........: Engenharia de Telecomunicações
 //  Licença .....: MIT
 // -----------------------------------------------------------------------------
 //  Notas desta versão: paginação ABNT; títulos sem indicativo centralizados;
@@ -397,8 +396,11 @@
     #v(2cm)
     #align(center)[#text(size: 12pt, weight: "bold")[SUMÁRIO]]
     #v(2cm)
-    #show outline.entry.where(level: 1): it => { v(_esp-texto, weak: true); strong(upper(it)) }
-    #show outline.entry.where(level: 2): it => { v(0.4em, weak: true); upper(it) }
+    #set par(leading: _esp-texto, spacing: _esp-texto)
+    #show outline.entry.where(level: 1): it => strong(upper(it))
+    #show outline.entry.where(level: 2): it => upper(it)
+    #show outline.entry.where(level: 3): it => strong(it)
+    #show outline.entry.where(level: 4): it => emph(it)
     #outline(title: none, indent: 0pt, depth: 5)
   ]
 
@@ -442,8 +444,8 @@
   }
   show heading.where(level: 2): it => { v(_esp-texto); _sec(it, upper, "regular", "normal"); v(_esp-simples) }
   show heading.where(level: 3): it => { v(_esp-texto); _sec(it, x => x, "bold", "normal"); v(_esp-simples) }
-  show heading.where(level: 4): it => { v(_esp-texto); _sec(it, x => x, "regular", "normal"); v(_esp-simples) }
-  show heading.where(level: 5): it => { v(_esp-texto); _sec(it, x => x, "regular", "italic"); v(_esp-simples) }
+  show heading.where(level: 4): it => { v(_esp-texto); _sec(it, x => x, "regular", "italic"); v(_esp-simples) }
+  show heading.where(level: 5): it => { v(_esp-texto); _sec(it, x => x, "regular", "normal"); v(_esp-simples) }
 
   // Referencias: fonte 12, espacamento simples, alinhado a esquerda (secao 3.16)
   show bibliography: set text(size: 12pt)
