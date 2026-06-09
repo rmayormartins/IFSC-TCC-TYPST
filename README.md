@@ -79,18 +79,9 @@ IFSC-TCC-TYPST/
 │   └── referencias.bib       # bibliografia (BibTeX / ABNT)
 ├── apresentacao/
 │   ├── ifsc-saojose.typ      # tema dos slides (não precisa editar)
-│   └── exemplo.typ           # modelo de uso dos slides
-├── docs/
-│   └── img/                  # capturas usadas no README
-│       ├── mono1.png
-│       ├── mono2.png
-│       ├── slide1.png
-│       └── slide2.png
-├── LICENSE
-└── README.md
+│   └── exemplo.typ           # modelo de                   # capturas 
 ```
 
-Se os seus arquivos estiverem em outra pasta, ajuste os caminhos do `#import`.
 
 ---
 
