@@ -80,6 +80,28 @@
   supplement: [Quadro],
 )
 
+// Lista de ilustracoes / tabelas / quadros (formato "Tipo N - Titulo .... pag").
+// Titulo centralizado, entradas com prefixo alinhado e pontilhado ate a pagina.
+#let _lista(titulo, alvo, larg: 6em) = page[
+  #v(1cm)
+  #align(center)[#text(size: 12pt, weight: "bold")[#titulo]]
+  #v(1.5cm)
+  #set par(leading: 1.0em, first-line-indent: 0cm)
+  #show link: set text(fill: black)
+  #show outline.entry: it => {
+    v(1.0em, weak: true)
+    link(it.element.location())[
+      #grid(
+        columns: (larg, 1fr),
+        align: (left + top, left + top),
+        [#it.prefix() #sym.dash.en],
+        [#it.body() #box(width: 1fr, repeat[.]) #it.page()],
+      )
+    ]
+  }
+  #outline(title: none, target: alvo)
+]
+
 // =====================================================================
 //  Template principal
 // =====================================================================
@@ -128,7 +150,7 @@
     fill: black,
     lang: "pt", region: "br",
   )
-  set par(justify: true, leading: _esp-texto, first-line-indent: _recuo, spacing: _esp-texto)
+  set par(justify: true, leading: _esp-texto, first-line-indent: (amount: _recuo, all: true), spacing: _esp-texto)
 
   // ---------- Numeracao progressiva (secao 2.6) ----------
   set heading(numbering: "1.1.1.1.1 ")
@@ -308,7 +330,7 @@
   // ---------- AGRADECIMENTOS (titulo centralizado, maiusc., negrito) ----------
   if agradecimentos != none {
     page[
-      #v(2cm)
+      #v(1cm)
       #align(center)[#text(size: 12pt, weight: "bold")[AGRADECIMENTOS]]
       #v(2cm)
       #set par(first-line-indent: _recuo, justify: true, leading: _esp-texto)
@@ -334,7 +356,7 @@
   // ---------- RESUMO ----------
   if resumo != none {
     page[
-      #v(2cm)
+      #v(1cm)
       #align(center)[#text(size: 12pt, weight: "bold")[RESUMO]]
       #v(2cm)
       #set par(first-line-indent: 0cm, justify: true, leading: _esp-texto)
@@ -349,7 +371,7 @@
   // ---------- ABSTRACT ----------
   if abstract != none {
     page[
-      #v(2cm)
+      #v(1cm)
       #align(center)[#text(size: 12pt, weight: "bold")[ABSTRACT]]
       #v(2cm)
       #set par(first-line-indent: 0cm, justify: true, leading: _esp-texto)
@@ -362,45 +384,31 @@
   }
 
   // ---------- LISTA DE ILUSTRACOES (automatica) ----------
-  if lista-figuras {
-    page[
-      #v(2cm)
-      #align(center)[#text(size: 12pt, weight: "bold")[LISTA DE ILUSTRAÇÕES]]
-      #v(2cm)
-      #outline(title: none, target: figure.where(kind: image))
-    ]
-  }
+  if lista-figuras { _lista("LISTA DE ILUSTRAÇÕES", figure.where(kind: image)) }
 
   // ---------- LISTA DE TABELAS (automatica) ----------
-  if lista-tabelas {
-    page[
-      #v(2cm)
-      #align(center)[#text(size: 12pt, weight: "bold")[LISTA DE TABELAS]]
-      #v(2cm)
-      #outline(title: none, target: figure.where(kind: table))
-    ]
-  }
+  if lista-tabelas { _lista("LISTA DE TABELAS", figure.where(kind: table)) }
 
   // ---------- LISTA DE QUADROS (automatica, opcional) ----------
-  if lista-quadros {
-    page[
-      #v(2cm)
-      #align(center)[#text(size: 12pt, weight: "bold")[LISTA DE QUADROS]]
-      #v(2cm)
-      #outline(title: none, target: figure.where(kind: "quadro"))
-    ]
-  }
+  if lista-quadros { _lista("LISTA DE QUADROS", figure.where(kind: "quadro")) }
 
   // ---------- SUMARIO (secao 3.14) ----------
   page[
-    #v(2cm)
+    #v(1cm)
     #align(center)[#text(size: 12pt, weight: "bold")[SUMÁRIO]]
     #v(2cm)
     #set par(leading: _esp-texto, spacing: _esp-texto)
-    #show outline.entry.where(level: 1): it => strong(upper(it))
-    #show outline.entry.where(level: 2): it => upper(it)
-    #show outline.entry.where(level: 3): it => strong(it)
-    #show outline.entry.where(level: 4): it => emph(it)
+    #show link: set text(fill: black)
+    // numero numa coluna fixa, titulos alinhados; emfase por nivel (Quadro 2)
+    #show outline.entry: it => {
+      let est = if it.level == 1 { x => strong(upper(x)) } else if it.level == 2 { x => upper(x) } else if it.level == 3 { x => strong(x) } else if it.level == 4 { x => emph(x) } else { x => x }
+      v(_esp-texto, weak: true)
+      link(it.element.location(), est(grid(
+        columns: (2.8em, 1fr),
+        it.prefix(),
+        [#it.body() #box(width: 1fr, repeat[.]) #it.page()],
+      )))
+    }
     #outline(title: none, indent: 0pt, depth: 5)
   ]
 
@@ -429,7 +437,6 @@
 
   show heading.where(level: 1): it => {
     pagebreak(weak: true)
-    v(2cm)
     if it.numbering != none {
       _sec(it, upper, "bold", "normal")
     } else {
@@ -440,7 +447,7 @@
         #align(center)[#upper(it.body)]
       ]
     }
-    v(1cm)
+    v(0.8cm)
   }
   show heading.where(level: 2): it => { v(_esp-texto); _sec(it, upper, "regular", "normal"); v(_esp-simples) }
   show heading.where(level: 3): it => { v(_esp-texto); _sec(it, x => x, "bold", "normal"); v(_esp-simples) }
@@ -461,7 +468,7 @@
   // REFERENCIAS (titulo sem indicativo, centralizado)
   if bibliografia != none {
     titulo-livre[REFERÊNCIAS]
-    bibliography(bibliografia, title: none, style: "associacao-brasileira-de-normas-tecnicas")
+    bibliography(bibliografia, title: none, style: "abnt.csl")
   }
 
   // GLOSSARIO (opcional)
