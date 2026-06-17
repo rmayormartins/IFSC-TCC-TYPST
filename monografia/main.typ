@@ -11,7 +11,6 @@
 //  Repositório .: https://github.com/rmayormartins/IFSC-TCC-TYPST
 //
 //  Versão ......: 0.2  (08/jun/2026)
-//  Para ........: Engenharia de Telecomunicações
 //  Licença .....: MIT
 // =============================================================================
 
@@ -22,7 +21,7 @@
   subtitulo: "",
   autor: "Nome Completo do Estudante",
   orientador: "Prof. Dr. Nome do Orientador",
-  coorientador: "",
+  coorientador: "Prof. Dr. Nome do Coorientador",
   campus: "São José",
   ano: "2025",
   data-defesa: "28 de junho de 2025",
